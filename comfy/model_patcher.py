@@ -163,6 +163,9 @@ def get_key_weight(model, key):
         except AttributeError:
             pass
 
+        # Check if attribute exists before getting it (fixes RMS_norm modules that use gamma instead of weight)
+        if not hasattr(op, op_keys[1]):
+            return None, None, None
         weight = getattr(op, op_keys[1])
         if convert_func is not None:
             weight = comfy.utils.get_attr(model, key)
